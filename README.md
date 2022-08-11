@@ -16,3 +16,8 @@
     Animated.spring, spring 등을 이용해 애니메이션 가능
     useNativeDriver:true 사용시 네이티브에서 애니메이션을 처리해 성능의 이점을 가짐
     toValue 는 움직일 값
+
+## 4.5
+
+    .start() 콜백함수로 toggleUp 을 이용해 up state를 바꾸면 State 를 바꾸어 재렌더링이 일어나 Y 값이 0으로 초기화 됨
+    !!!!!!!!!재렌더링이 일어나도 value 를 유지하기위해 useRef 사용 const Y = useRef(new Animated.Value(0)).current; 를 사용하면 재렌더링 시에도 Y 값 유지
