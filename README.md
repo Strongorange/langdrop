@@ -21,3 +21,8 @@
 
     .start() 콜백함수로 toggleUp 을 이용해 up state를 바꾸면 State 를 바꾸어 재렌더링이 일어나 Y 값이 0으로 초기화 됨
     !!!!!!!!!재렌더링이 일어나도 value 를 유지하기위해 useRef 사용 const Y = useRef(new Animated.Value(0)).current; 를 사용하면 재렌더링 시에도 Y 값 유지
+
+## 4.6
+
+    interpolation => [-300, 0, 300] 의 인풋을 가지고 [1, 0, 1] 의 아웃풋을 내는 개념
+    이를 이용해 opacity, borderradius 가 위치에 따라 바뀌는 애니메이션을 추가!
