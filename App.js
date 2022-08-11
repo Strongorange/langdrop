@@ -51,7 +51,10 @@ export default function App() {
           style={{
             borderRadius,
             backgroundColor: bgColor,
-            transform: [{ rotateY: rotation }, { translateY: POSITION.y }],
+            transform: [
+              { rotateY: rotation },
+              ...POSITION.getTranslateTransform(),
+            ],
           }}
         />
       </Pressable>

@@ -32,3 +32,8 @@
     interpolation input 은 숫자,ouput 은 string 등 다양하게 됨!
     nativeDriver 가 못 하는 animation 도 존재 이럴때는 JS 를 선택해야 함
     Animated.ValueXY 를 사용해 X, Y 축 양쪽을 이제 바꿀 수 있음
+
+## 4.8
+
+    toValue 에 {x: xx , y: xx} 식으로 따로 값 지정 가능
+    POSITION.getTranslateTransform() 을 사용해 쉽게 transfrom 값 얻기 가능 "..." 을 사용해 배열의 값만 뽑아옴
