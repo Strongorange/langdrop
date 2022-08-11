@@ -26,3 +26,9 @@
 
     interpolation => [-300, 0, 300] 의 인풋을 가지고 [1, 0, 1] 의 아웃풋을 내는 개념
     이를 이용해 opacity, borderradius 가 위치에 따라 바뀌는 애니메이션을 추가!
+
+## 4.7
+
+    interpolation input 은 숫자,ouput 은 string 등 다양하게 됨!
+    nativeDriver 가 못 하는 animation 도 존재 이럴때는 JS 를 선택해야 함
+    Animated.ValueXY 를 사용해 X, Y 축 양쪽을 이제 바꿀 수 있음
