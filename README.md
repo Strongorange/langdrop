@@ -37,3 +37,4 @@
 
     toValue 에 {x: xx , y: xx} 식으로 따로 값 지정 가능
     POSITION.getTranslateTransform() 을 사용해 쉽게 transfrom 값 얻기 가능 "..." 을 사용해 배열의 값만 뽑아옴
+    Animated.timg~~ 을 변수에 저장해 moveUp 함수에서 Animated.loop, Animated.sequence() 를 사용하여 연속 애니메이션 사용가능
