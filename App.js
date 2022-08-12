@@ -28,22 +28,25 @@ export default function App() {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (_, { dx, dy }) => {
+        console.log("Finger Moving");
         console.log(dx, dy);
         POSITION.setValue({
           x: dx,
           y: dy,
         });
       },
+
+      onPanResponderGrant: () => {
+        console.log("touch start");
+        POSITION.setOffset({
+          x: POSITION.x._value,
+          y: POSITION.y._value,
+        });
+      },
+
       onPanResponderRelease: () => {
         console.log("touch released");
-        Animated.spring(POSITION, {
-          toValue: {
-            x: 0,
-            y: 0,
-          },
-          bounciness: 15,
-          useNativeDriver: false,
-        }).start();
+        POSITION.flattenOffset();
       },
     })
   ).current;
