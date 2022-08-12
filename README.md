@@ -38,3 +38,10 @@
     toValue 에 {x: xx , y: xx} 식으로 따로 값 지정 가능
     POSITION.getTranslateTransform() 을 사용해 쉽게 transfrom 값 얻기 가능 "..." 을 사용해 배열의 값만 뽑아옴
     Animated.timg~~ 을 변수에 저장해 moveUp 함수에서 Animated.loop, Animated.sequence() 를 사용하여 연속 애니메이션 사용가능
+
+## 4.9
+
+    터치, 드래그를 감지하기 위해서
+    PanResponder 를 사용 재렌더링시에도 초기화되는 것을 막기위해 역시 useRef().current 를 사용해서 panResponder 를 초기화해준다
+    onStartShouldSetPanResponder 를 true 로 함으로서 On
+    onPanResponderMove(evt, gestureState) 를 이용해 gestureState 에 있는 dx, dy 를 사용해 터치 후 움직인 거리를 구할 수 있고 이를 POSITION.setValue() 를 통해 x, y 에 넣어주면 드래그 애니메이션 완성
