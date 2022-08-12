@@ -45,3 +45,11 @@
     PanResponder 를 사용 재렌더링시에도 초기화되는 것을 막기위해 역시 useRef().current 를 사용해서 panResponder 를 초기화해준다
     onStartShouldSetPanResponder 를 true 로 함으로서 On
     onPanResponderMove(evt, gestureState) 를 이용해 gestureState 에 있는 dx, dy 를 사용해 터치 후 움직인 거리를 구할 수 있고 이를 POSITION.setValue() 를 통해 x, y 에 넣어주면 드래그 애니메이션 완성
+
+## 4.10
+
+    PanResponder 의 onPanResponderRelease 는 손가락을 땔때 작용
+    4.9 까지는 도형을 옮기고 다시 옮기면 중앙에서부터 다시 움직이는 문제가 발생
+    이를 터치 해제시 가운데로 도형을 옮기려고 함
+    setValue 를 사용하면 애니메이션 없이 도형이 순간이동해 부자연스러움
+    터치가 끝날때 onPanResponderRelease 에 Animated.spring 을 이용해서 POSITION 의 x, y 값을 toValue 0으로 애니메이션으로 바꿔주면 자연스러운 애니메이션이 곁들여진 가운데로 이동 완성

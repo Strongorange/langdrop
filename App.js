@@ -34,6 +34,17 @@ export default function App() {
           y: dy,
         });
       },
+      onPanResponderRelease: () => {
+        console.log("touch released");
+        Animated.spring(POSITION, {
+          toValue: {
+            x: 0,
+            y: 0,
+          },
+          bounciness: 15,
+          useNativeDriver: false,
+        }).start();
+      },
     })
   ).current;
 
