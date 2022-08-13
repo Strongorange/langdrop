@@ -77,7 +77,8 @@
     코드 재배치
     Animations 들을 상수로 선언함으로서 사용하기 쉽게만듬
     PanRelease 에서 dx 값으로 화면 가장자리에서 Release 시 옆으로 이동해 사라지는 효과를 줌
-    그게 아니라면 Animated.parallel 을 사용해 상수로 선언한 애니메이션들을 차례로 실행하게 만듬!
+    그게 아니라면 Animated.parallel 을 사용해 상수로 선언한 애니메이션들을 !!동시에!! 실행하게 만듬!
+    Animated.parrarel 은 동.시.에 배열의 애니메이션 실행, Animated.sequence 는 배열의 애니메이션 순.서.대.로 실행
 
 ## 4.14
 
@@ -100,3 +101,8 @@
     restDisplacementThreshold: 150, 을 넣어줌
     SpeedThreshold 는 애니메이션의 움직임 속도가 해당 값보다 아래로 내려가면 애니메이션을 중지, DisplacementThreshold 는 애니메이션의 남은 거리가 해당값보다 작을때 애니메이션을 중지
     위 작업으로 애니메이션을 빨리 끝내어 카드가 바로바로 바뀌게 할 수 있음
+
+## 4.17 ~ 4.19
+
+    Drops 클론
+    Interpolation, PanResponder, Animation 을 사용함

@@ -1,64 +1,89 @@
 import React, { useRef, useState } from "react";
-import { Animated, Dimensions, PanResponder, Text, View } from "react-native";
+import { Animated, Easing, PanResponder, View } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import icons from "./icons";
 
+const BLACK_COLOR = "#1e272e";
+const GREY = "#485460";
+const GREEN = "#2ecc71";
+const RED = "#e74c3c";
+
 const Container = styled.View`
+  flex: 1;
+  background-color: ${BLACK_COLOR};
+`;
+
+const Edge = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: #00a8ff;
 `;
 
-const CardContainer = styled.View`
+const WordContainer = styled(Animated.createAnimatedComponent(View))`
+  width: 100px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  background-color: ${GREY};
+  border-radius: 50px;
+`;
+
+const Word = styled.Text`
+  font-size: 38px;
+  color: ${(props) => props.color};
+  font-weight: 500;
+`;
+
+const Center = styled.View`
   flex: 3;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 `;
 
-const Card = styled(Animated.createAnimatedComponent(View))`
-  width: 260px;
-  height: 260px;
-  justify-content: center;
-  align-items: center;
+const IconCard = styled(Animated.createAnimatedComponent(View))`
   background-color: white;
-  border-radius: 20px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  position: absolute;
-`;
-
-const BtnContainer = styled.View`
-  flex-direction: row;
-  flex: 1;
-`;
-
-const Btn = styled.TouchableOpacity`
-  margin: 0px 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
 `;
 
 export default function App() {
   // State
   const [index, setIndex] = useState(0);
+  const nextIcon = () => {
+    Animated.parallel([
+      Animated.spring(scale, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+      Animated.spring(opacity, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]).start();
 
+    setIndex((prev) => prev + 1);
+  };
   // Values
   const scale = useRef(new Animated.Value(1)).current;
-  const position = useRef(new Animated.Value(0)).current;
-  const rotation = position.interpolate({
-    inputRange: [-250, 259],
-    outputRange: ["-15deg", "15deg"],
-    extrapolate: "clamp", //inupt range 를 넘는 범위에서 동작하지 않게해주는 역할
-  });
+  const position = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
-  const secondScale = position.interpolate({
-    inputRange: [-300, 0, 300],
-    outputRange: [1, 0.7, 1],
+  const scaleOne = position.y.interpolate({
+    inputRange: [-170, -10],
+    outputRange: [1.8, 1],
+    extrapolate: "clamp",
+  });
+  const scaleTwo = position.y.interpolate({
+    inputRange: [10, 170],
+    outputRange: [1, 1.8],
     extrapolate: "clamp",
   });
 
   // Animations
   const onPressIn = Animated.spring(scale, {
-    toValue: 0.95,
+    toValue: 0.9,
     useNativeDriver: true,
   });
 
@@ -66,88 +91,80 @@ export default function App() {
     toValue: 1,
     useNativeDriver: true,
   });
-
-  const goCenter = Animated.spring(position, {
+  const goHome = Animated.spring(position, {
     toValue: 0,
     useNativeDriver: true,
   });
-
-  const goLeft = Animated.spring(position, {
-    toValue: -400,
-    tension: 5,
+  const onDropScale = Animated.timing(scale, {
+    toValue: 0,
     useNativeDriver: true,
-    restSpeedThreshold: 130,
-    restDisplacementThreshold: 130,
+    easing: Easing.linear,
+    duration: 100,
   });
-
-  const goRight = Animated.spring(position, {
-    toValue: 400,
-    tension: 5,
+  const onDropOpacity = Animated.timing(opacity, {
+    toValue: 0,
     useNativeDriver: true,
-    restSpeedThreshold: 150,
-    restDisplacementThreshold: 150,
+    easing: Easing.linear,
+    duration: 100,
   });
 
   // Pan Responders
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => onPressIn.start(),
-      onPanResponderMove: (_, { dx, dy }) => {
-        position.setValue(dx);
+      onPanResponderGrant: () => {
+        onPressIn.start();
       },
-      onPanResponderRelease: (_, { dx }) => {
-        if (dx < -260) {
-          goLeft.start(onDissmiss);
-        } else if (dx > 260) {
-          goRight.start(onDissmiss);
+      onPanResponderMove: (_, { dx, dy }) => {
+        console.log(dy);
+        position.setValue({
+          x: dx,
+          y: dy,
+        });
+      },
+      onPanResponderRelease: (_, { dy }) => {
+        if (dy < -200 || dy > 200) {
+          Animated.sequence([
+            Animated.parallel([onDropOpacity, onDropScale]),
+            Animated.timing(position, {
+              toValue: 0,
+              useNativeDriver: true,
+              duration: 100,
+              easing: Easing.linear,
+            }),
+          ]).start(nextIcon);
         } else {
-          Animated.parallel([onPressOut, goCenter]).start();
+          Animated.parallel([onPressOut, goHome]).start();
         }
       },
     })
   ).current;
 
   //fuctions
-  const closePress = () => {
-    goLeft.start(onDissmiss);
-  };
-  const checkPress = () => {
-    goRight.start(onDissmiss);
-  };
-  const onDissmiss = () => {
-    scale.setValue(1);
-    position.setValue(0);
-    setIndex((prev) => prev + 1);
-  };
 
   return (
     <Container>
-      <CardContainer>
-        <Card style={{ transform: [{ scale: secondScale }] }}>
-          <Ionicons name={icons[index + 1]} color="#192a56" size={98} />
-        </Card>
-        <Card
-          style={{
-            transform: [
-              { scale },
-              { translateX: position },
-              { rotateZ: rotation },
-            ],
-          }}
+      <Edge>
+        <WordContainer style={{ transform: [{ scale: scaleOne }] }}>
+          <Word color={GREEN}>갸앙!</Word>
+        </WordContainer>
+      </Edge>
+      <Center>
+        <IconCard
           {...panResponder.panHandlers}
+          style={{
+            opacity,
+            transform: [...position.getTranslateTransform(), { scale }],
+          }}
         >
-          <Ionicons name={icons[index]} color="#192a56" size={98} />
-        </Card>
-      </CardContainer>
-      <BtnContainer>
-        <Btn onPress={closePress}>
-          <Ionicons name="close-circle" color="white" size={58} />
-        </Btn>
-        <Btn onPress={checkPress}>
-          <Ionicons name="checkmark-circle" color="white" size={58} />
-        </Btn>
-      </BtnContainer>
+          <Ionicons name={icons[index]} color={GREY} size={76} />
+        </IconCard>
+      </Center>
+      <Edge>
+        <WordContainer style={{ transform: [{ scale: scaleTwo }] }}>
+          <Word color={RED}>몰라</Word>
+        </WordContainer>
+      </Edge>
     </Container>
   );
 }
