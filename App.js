@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Animated, Dimensions, PanResponder, View } from "react-native";
+import { Animated, Dimensions, PanResponder, Text, View } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import icons from "./icons";
 
 const Container = styled.View`
   flex: 1;
@@ -37,6 +38,9 @@ const Btn = styled.TouchableOpacity`
 `;
 
 export default function App() {
+  // State
+  const [index, setIndex] = useState(0);
+
   // Values
   const scale = useRef(new Animated.Value(1)).current;
   const position = useRef(new Animated.Value(0)).current;
@@ -69,13 +73,13 @@ export default function App() {
   });
 
   const goLeft = Animated.spring(position, {
-    toValue: -500,
+    toValue: -400,
     tension: 5,
     useNativeDriver: true,
   });
 
   const goRight = Animated.spring(position, {
-    toValue: 500,
+    toValue: 400,
     tension: 5,
     useNativeDriver: true,
   });
@@ -90,9 +94,9 @@ export default function App() {
       },
       onPanResponderRelease: (_, { dx }) => {
         if (dx < -260) {
-          goLeft.start();
+          goLeft.start(onDissmiss);
         } else if (dx > 260) {
-          goRight.start();
+          goRight.start(onDissmiss);
         } else {
           Animated.parallel([onPressOut, goCenter]).start();
         }
@@ -102,17 +106,22 @@ export default function App() {
 
   //fuctions
   const closePress = () => {
-    goLeft.start();
+    goLeft.start(onDissmiss);
   };
   const checkPress = () => {
-    goRight.start();
+    goRight.start(onDissmiss);
+  };
+  const onDissmiss = () => {
+    scale.setValue(1);
+    position.setValue(0);
+    setIndex((prev) => prev + 1);
   };
 
   return (
     <Container>
       <CardContainer>
         <Card style={{ transform: [{ scale: secondScale }] }}>
-          <Ionicons name="beer" color="#192a56" size={98} />
+          <Ionicons name={icons[index + 1]} color="#192a56" size={98} />
         </Card>
         <Card
           style={{
@@ -124,7 +133,7 @@ export default function App() {
           }}
           {...panResponder.panHandlers}
         >
-          <Ionicons name="pizza" color="#192a56" size={98} />
+          <Ionicons name={icons[index]} color="#192a56" size={98} />
         </Card>
       </CardContainer>
       <BtnContainer>

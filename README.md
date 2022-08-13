@@ -85,3 +85,9 @@
     맥주 카드를 추가하고 Card 들을 position:absoulute, Card Container 에 flex:3 BtnContainer 에 flex:1 으로 자리를 잡아줘 맥주와 피자 카드가 겹치게 만듬
     pizza 의 position 을 interpolation 시켜 피자의 위치에따라 맥주카드의 크기가 변하게 함
     하지만 맥주에는 PanHandler 가 존재하지 않아 맥주는 터치 불가
+
+## 4.15
+
+    무한한 카드생성
+    사실 카드는 2개밖에 없음
+    하지만 화면 밖으로 나갔을때 카드의 위치는 setValue 를 통해 0으로 바꾸면 애니메이션 없이 원래 자리로 돌아옴 그와 동시에 setIndex 로 인덱스를 바꿔주면 첫번째 카드가 뒤에있던 카드와 같은 아이콘을 보여주어 실제로는 2개의 카드지만 무한한 카드처럼 보임
