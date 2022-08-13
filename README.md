@@ -78,3 +78,10 @@
     Animations 들을 상수로 선언함으로서 사용하기 쉽게만듬
     PanRelease 에서 dx 값으로 화면 가장자리에서 Release 시 옆으로 이동해 사라지는 효과를 줌
     그게 아니라면 Animated.parallel 을 사용해 상수로 선언한 애니메이션들을 차례로 실행하게 만듬!
+
+## 4.14
+
+    버튼을 추가하고 버튼에 goLeft, goRight 를 넣어줘 버튼으로 피자 애니메이션을 작동
+    맥주 카드를 추가하고 Card 들을 position:absoulute, Card Container 에 flex:3 BtnContainer 에 flex:1 으로 자리를 잡아줘 맥주와 피자 카드가 겹치게 만듬
+    pizza 의 position 을 interpolation 시켜 피자의 위치에따라 맥주카드의 크기가 변하게 함
+    하지만 맥주에는 PanHandler 가 존재하지 않아 맥주는 터치 불가

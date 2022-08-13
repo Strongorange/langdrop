@@ -10,6 +10,12 @@ const Container = styled.View`
   background-color: #00a8ff;
 `;
 
+const CardContainer = styled.View`
+  flex: 3;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Card = styled(Animated.createAnimatedComponent(View))`
   width: 260px;
   height: 260px;
@@ -18,6 +24,16 @@ const Card = styled(Animated.createAnimatedComponent(View))`
   background-color: white;
   border-radius: 20px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  position: absolute;
+`;
+
+const BtnContainer = styled.View`
+  flex-direction: row;
+  flex: 1;
+`;
+
+const Btn = styled.TouchableOpacity`
+  margin: 0px 10px;
 `;
 
 export default function App() {
@@ -28,6 +44,12 @@ export default function App() {
     inputRange: [-250, 259],
     outputRange: ["-15deg", "15deg"],
     extrapolate: "clamp", //inupt range 를 넘는 범위에서 동작하지 않게해주는 역할
+  });
+
+  const secondScale = position.interpolate({
+    inputRange: [-300, 0, 300],
+    outputRange: [1, 0.7, 1],
+    extrapolate: "clamp",
   });
 
   // Animations
@@ -46,6 +68,18 @@ export default function App() {
     useNativeDriver: true,
   });
 
+  const goLeft = Animated.spring(position, {
+    toValue: -500,
+    tension: 5,
+    useNativeDriver: true,
+  });
+
+  const goRight = Animated.spring(position, {
+    toValue: 500,
+    tension: 5,
+    useNativeDriver: true,
+  });
+
   // Pan Responders
   const panResponder = useRef(
     PanResponder.create({
@@ -55,18 +89,10 @@ export default function App() {
         position.setValue(dx);
       },
       onPanResponderRelease: (_, { dx }) => {
-        if (dx < -290) {
-          console.log("dismiss to the left");
-          Animated.spring(position, {
-            toValue: -500,
-            useNativeDriver: true,
-          }).start();
-        } else if (dx > 290) {
-          console.log("dismiss to the right");
-          Animated.spring(position, {
-            toValue: 500,
-            useNativeDriver: true,
-          }).start();
+        if (dx < -260) {
+          goLeft.start();
+        } else if (dx > 260) {
+          goRight.start();
         } else {
           Animated.parallel([onPressOut, goCenter]).start();
         }
@@ -74,20 +100,41 @@ export default function App() {
     })
   ).current;
 
+  //fuctions
+  const closePress = () => {
+    goLeft.start();
+  };
+  const checkPress = () => {
+    goRight.start();
+  };
+
   return (
     <Container>
-      <Card
-        style={{
-          transform: [
-            { scale },
-            { translateX: position },
-            { rotateZ: rotation },
-          ],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Ionicons name="pizza" color="#192a56" size={98} />
-      </Card>
+      <CardContainer>
+        <Card style={{ transform: [{ scale: secondScale }] }}>
+          <Ionicons name="beer" color="#192a56" size={98} />
+        </Card>
+        <Card
+          style={{
+            transform: [
+              { scale },
+              { translateX: position },
+              { rotateZ: rotation },
+            ],
+          }}
+          {...panResponder.panHandlers}
+        >
+          <Ionicons name="pizza" color="#192a56" size={98} />
+        </Card>
+      </CardContainer>
+      <BtnContainer>
+        <Btn onPress={closePress}>
+          <Ionicons name="close-circle" color="white" size={58} />
+        </Btn>
+        <Btn onPress={checkPress}>
+          <Ionicons name="checkmark-circle" color="white" size={58} />
+        </Btn>
+      </BtnContainer>
     </Container>
   );
 }
