@@ -71,3 +71,10 @@
     이후 scale, position 이라는 AnimatedValue 를 만들고 (재렌더링시에도 유지되게 useRef 사용) PanResponder 생성해
     터치 시작, 드래그, 릴리즈 시에 역할을 만듬
     터치 이벤트에서 조정되는 값을 Card Components 의 transform 에 집어넣어 크기, 위치가 연동되게 함
+
+## 4.13
+
+    코드 재배치
+    Animations 들을 상수로 선언함으로서 사용하기 쉽게만듬
+    PanRelease 에서 dx 값으로 화면 가장자리에서 Release 시 옆으로 이동해 사라지는 효과를 줌
+    그게 아니라면 Animated.parallel 을 사용해 상수로 선언한 애니메이션들을 차례로 실행하게 만듬!
